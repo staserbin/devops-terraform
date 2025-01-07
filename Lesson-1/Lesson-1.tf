@@ -1,3 +1,20 @@
+# -----------------------------------------------------------------------------------
+# Terraform Configuration File
+#
+# Purpose   : Creating an EC2 instance.
+# Author    : StanOps Team
+# Created   : 2025-01-06
+# Last Edit : 2025-01-06
+#
+# Requirements:
+#   - Terraform v1.4.0 or higher
+#   - AWS Provider v5.0.0 or higher
+#
+# Notes:
+#   - Ensure AWS credentials are configured before applying.
+# -----------------------------------------------------------------------------------
+
+
 provider "aws" {
   region     = "us-east-1"
   access_key = var.aws_access_key
@@ -19,7 +36,7 @@ resource "aws_instance" "my_Amazon_Linux" {
 
   tags = {
     Name        = "My Amazon Linux Server"
-    Description = "Test EC2 with Amazon Linux by Terraform"
+    Description = "Test EC2 with Amazon Linux by Terraform for Lesson-2"
     Owner       = "Stan Serbin"
   }
 }
