@@ -3,8 +3,8 @@
 #
 # Purpose   : Creating an EC2 instance and a security group.
 # Author    : StanOps Team
-# Created   : 2025-01-06
-# Last Edit : 2025-01-06
+# Created   : 2025-01-07
+# Last Edit : 2025-01-07
 #
 # Requirements:
 #   - Terraform v1.4.0 or higher
@@ -28,15 +28,7 @@ resource "aws_instance" "my_webserver" {
 
   vpc_security_group_ids = [aws_security_group.my_terraform_security_group.id]
 
-  user_data = <<EOF
-#!/bin/bash
-yum -y update
-yum -y install httpd
-myIp='curl http://169.254.169.254/latest/meta-data/local-ipv4'
-echo "<h2>Stan's WebServer with IP: $myIp</h2><br>Build by Terraform" > /var/www/html/index.html
-sudo service httpd start
-chkconfig httpd on
-EOF
+  user_data = file("my_script.sh")
 
   root_block_device {
     volume_type           = "gp2" # Specify gp2 (General Purpose SSD)
