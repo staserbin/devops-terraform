@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------------
 # Terraform Configuration File
 #
-# Purpose   : Creating an EC2 instance with user data script using templatefile.
+# Purpose   : Creating Security Group using dynamic code blocks.
 # Author    : StanOps Team
 # Created   : 2025-01-08
 # Last Edit : 2025-01-08
@@ -28,11 +28,7 @@ resource "aws_instance" "my_webserver" {
 
   vpc_security_group_ids = [aws_security_group.my_terraform_security_group.id]
 
-  user_data = templatefile("user_data.sh", {
-    f_name = "Stan",
-    l_name = "Ops",
-    names = ["Amazon", "Google", "Microsoft"]
-  })
+  user_data = file("user_data.sh")
 
   root_block_device {
     volume_type           = "gp2" # Specify gp2 (General Purpose SSD)
@@ -48,28 +44,17 @@ resource "aws_instance" "my_webserver" {
 }
 
 resource "aws_security_group" "my_terraform_security_group" {
-  name = "Terraform WebServer Security Group"
-  description = "Security group with SSH, HTTP, and HTTPS rules by Terraform"
+  name = "Terraform WebServer Dynamic Security Group"
+  description = "Dynamic Security Group with SSH, HTTP, and HTTPS rules by Terraform"
 
-  ingress {
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Allow HTTP from any IP
-  }
-
-  ingress {
-    from_port = 443
-    to_port = 443
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Allow HTTPS from any IP
-  }
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Allow SSH from any IP
+  dynamic "ingress" {
+    for_each = ["80", "443", "22"]
+    content {
+      from_port = ingress.value
+      to_port = ingress.value
+      protocol = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   }
 
   egress {
@@ -80,7 +65,7 @@ resource "aws_security_group" "my_terraform_security_group" {
   }
 
   tags = {
-    Name        = "Web Server Security Group"
+    Name        = "Dynamic Security Group"
     Owner       = "Stan Serbin"
   }
 }
