@@ -1,10 +1,10 @@
 # -----------------------------------------------------------------------------------
 # Terraform Configuration File
 #
-# Purpose   : Creating an EC2 instance and a security group.
+# Purpose   : Creating an EC2 instance with user data script using templatefile.
 # Author    : StanOps Team
-# Created   : 2025-01-07
-# Last Edit : 2025-01-07
+# Created   : 2025-01-08
+# Last Edit : 2025-01-08
 #
 # Requirements:
 #   - Terraform v1.4.0 or higher
@@ -28,7 +28,11 @@ resource "aws_instance" "my_webserver" {
 
   vpc_security_group_ids = [aws_security_group.my_terraform_security_group.id]
 
-  user_data = file("my_script.sh")
+  user_data = templatefile("user_data.sh.tpl", {
+    f_name = "Stan",
+    l_name = "Ops",
+    names = ["Amaxon", "Google", "Microsoft"]
+  })
 
   root_block_device {
     volume_type           = "gp2" # Specify gp2 (General Purpose SSD)

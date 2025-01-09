@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------------
 # Terraform Configuration File
 #
-# Purpose   : Creating an EC2 instance and a security group.
+# Purpose   : Creating an EC2 instance with user data script using file.
 # Author    : StanOps Team
 # Created   : 2025-01-07
 # Last Edit : 2025-01-07
