@@ -42,7 +42,7 @@ resource "aws_instance" "my_webserver" {
 
   tags = {
     Name        = "Amazon Linux Server"
-    Description = "Test EC2 with Amazon Linux by Terraform for Lesson-2"
+    Description = "Test EC2 with Amazon Linux by Terraform for Lesson-4"
     Owner       = "Stan Serbin"
   }
 }
