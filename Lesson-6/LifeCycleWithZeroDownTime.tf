@@ -2,6 +2,7 @@
 # Terraform Configuration File
 #
 # Purpose   : LifeCycle with Zero DownTime.
+#           : Outputs.
 # Author    : StanOps Team
 # Created   : 2025-01-08
 # Last Edit : 2025-01-08
@@ -21,10 +22,14 @@ provider "aws" {
   secret_key = var.aws_secret_key
 }
 
+//======================================================================================================================
+
 # Create Elastic IP and use the same IP-address each time even server is down/destroyed
 resource "aws_eip" "my_static_ip" {
   instance = aws_instance.my_webserver.id
 }
+
+//======================================================================================================================
 
 resource "aws_instance" "my_webserver" {
   ami           = "ami-01816d07b1128cd2d"
@@ -62,6 +67,8 @@ resource "aws_instance" "my_webserver" {
     create_before_destroy = true
   }
 }
+
+//======================================================================================================================
 
 resource "aws_security_group" "my_terraform_security_group" {
   name = "Terraform WebServer Dynamic Security Group"
