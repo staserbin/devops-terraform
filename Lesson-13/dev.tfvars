@@ -9,13 +9,13 @@
 # -----------------------------------------------------------------------------------
 
 
-region = "us-east-2"
+region        = "us-east-2"
 instance_type = "t2.micro"
 
 allow_ports = ["80", "22", "8080"]
 
 common_tags = {
-  Owner = "Stan Serbin"
-  Project = "Snake Inc."
+  Owner       = "Stan Serbin"
+  Project     = "Snake Inc."
   Environment = "dev"
 }

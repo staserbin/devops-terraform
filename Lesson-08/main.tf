@@ -16,7 +16,7 @@
 
 
 provider "aws" {
-  region = "us-east-1"
+  region     = "us-east-1"
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
 }
@@ -49,13 +49,13 @@ data "aws_vpc" "my_vpc" {
 //======================================================================================================================
 
 resource "aws_subnet" "prod_subnet" {
-  vpc_id = data.aws_vpc.my_vpc.id
+  vpc_id            = data.aws_vpc.my_vpc.id
   availability_zone = data.aws_availability_zones.available_zones.names[0]
-  cidr_block = "10.0.0.0/16"
+  cidr_block        = "10.0.0.0/16"
   tags = {
-    Name = "Subnet-1 in ${data.aws_availability_zones.available_zones.names[0]}"
+    Name    = "Subnet-1 in ${data.aws_availability_zones.available_zones.names[0]}"
     Account = "Subnet in Account ${data.aws_caller_identity.caller_id.account_id}"
-    Region = data.aws_region.current_region.description
+    Region  = data.aws_region.current_region.description
   }
 
   depends_on = [data.aws_vpc.my_vpc]

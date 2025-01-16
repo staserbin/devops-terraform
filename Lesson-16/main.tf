@@ -22,18 +22,18 @@ provider "aws" {
 //======================================================================================================================
 
 resource "random_string" "rds_password" {
-  length = 12 // length of password
-  special = true // include special characters
+  length           = 12       // length of password
+  special          = true     // include special characters
   override_special = "!#$@&%" // special characters that can be used for the password generation
 }
 
 //======================================================================================================================
 
 resource "aws_ssm_parameter" "rds_password" {
-  name  = "/prod/mysql"
+  name        = "/prod/mysql"
   description = "Master password for RDS MySQL"
-  type  = "SecureString"
-  value = random_string.rds_password.result
+  type        = "SecureString"
+  value       = random_string.rds_password.result
 }
 
 //======================================================================================================================
@@ -48,7 +48,7 @@ data "aws_ssm_parameter" "rds_password_from_ssm" {
 //======================================================================================================================
 
 resource "aws_db_instance" "my_rds" {
-  identifier = "prod-rds"
+  identifier           = "prod-rds"
   allocated_storage    = 10
   db_name              = "prod-db"
   engine               = "mysql"

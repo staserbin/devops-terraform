@@ -16,7 +16,7 @@ resource "null_resource" "command2" {
 
 resource "null_resource" "command3" {
   provisioner "local-exec" {
-    command = "print('Hello, World!')"
+    command     = "print('Hello, World!')"
     interpreter = ["python", "-c"]
   }
 }

@@ -16,7 +16,7 @@
 
 
 provider "aws" {
-  region = "us-east-1"
+  region     = "us-east-1"
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
 }
@@ -24,7 +24,7 @@ provider "aws" {
 //======================================================================================================================
 
 data "aws_ami" "latest_amazon_linux" {
-  owners = ["amazon"]
+  owners      = ["amazon"]
   most_recent = true
   filter {
     name   = "name"
@@ -35,7 +35,7 @@ data "aws_ami" "latest_amazon_linux" {
 //======================================================================================================================
 
 resource "aws_instance" "my_webserver_linux" {
-  ami = data.aws_ami.latest_amazon_linux.id // EC2 instance will be run with the latest AMI version
+  ami           = data.aws_ami.latest_amazon_linux.id // EC2 instance will be run with the latest AMI version
   instance_type = "t2.micro"
   key_name      = "my-instance-key-aws" # Use the existing key pair
 
