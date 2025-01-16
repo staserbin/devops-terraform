@@ -54,7 +54,7 @@ data "aws_ami" "ohio_latest_amazon_linux" {
   most_recent = true
   filter {
     name   = "name"
-    values = ["amazon/images/hvm-ssd/al-ami-*"]
+    values = ["al2023-ami-*"]
   }
 }
 
