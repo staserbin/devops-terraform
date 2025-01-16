@@ -16,7 +16,7 @@
 
 
 provider "aws" {
-  region = "us-east-1"
+  region     = "us-east-1"
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
 }
@@ -31,7 +31,7 @@ resource "aws_instance" "my_webserver" {
   user_data = templatefile("user_data.sh", {
     f_name = "Stan",
     l_name = "Ops",
-    names = ["Amazon", "Google", "Microsoft"]
+    names  = ["Amazon", "Google", "Microsoft"]
   })
 
   root_block_device {
@@ -48,20 +48,20 @@ resource "aws_instance" "my_webserver" {
 }
 
 resource "aws_security_group" "my_terraform_security_group" {
-  name = "Terraform WebServer Security Group"
+  name        = "Terraform WebServer Security Group"
   description = "Security group with SSH, HTTP, and HTTPS rules by Terraform"
 
   ingress {
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"] # Allow HTTP from any IP
   }
 
   ingress {
-    from_port = 443
-    to_port = 443
-    protocol = "tcp"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"] # Allow HTTPS from any IP
   }
 
@@ -73,14 +73,14 @@ resource "aws_security_group" "my_terraform_security_group" {
   }
 
   egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name        = "Web Server Security Group"
-    Owner       = "Stan Serbin"
+    Name  = "Web Server Security Group"
+    Owner = "Stan Serbin"
   }
 }

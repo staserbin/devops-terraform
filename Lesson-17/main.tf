@@ -22,12 +22,12 @@ provider "aws" {
 //======================================================================================================================
 
 resource "aws_instance" "my_webserver_1" {
-  ami           = "ami-09115b7bffbe3c5e4"
-#  instance_type = var.env == "prod" ? "t2.large" : "t2.micro" // X = CONDITION ? VALUE_IF_TRUE : VALUE_IF_FALSE
+  ami = "ami-05576a079321f21f8"
+  #  instance_type = var.env == "prod" ? "t2.large" : "t2.micro" // X == CONDITION ? VALUE_IF_TRUE : VALUE_IF_FALSE
   instance_type = var.env == "prod" ? var.ec2_size["prod"] : var.ec2_size["dev"]
 
   tags = {
-    Name = "${var.env}-server"
+    Name  = "${var.env}-server"
     Owner = var.env == "prod" ? var.prod_owner : var.no_prod_owner
   }
 }
@@ -35,7 +35,7 @@ resource "aws_instance" "my_webserver_1" {
 //======================================================================================================================
 
 resource "aws_instance" "my_dev_server" {
-  count = var.env == "dev" ? 1 : 0
+  count         = var.env == "dev" ? 1 : 0
   ami           = "ami-09115b7bffbe3c5e4"
   instance_type = "t2.micro"
 
@@ -47,11 +47,11 @@ resource "aws_instance" "my_dev_server" {
 //======================================================================================================================
 
 resource "aws_instance" "my_webserver_2" {
-  ami           = "ami-09115b7bffbe3c5e4"
+  ami           = "ami-05576a079321f21f8"
   instance_type = lookup(var.ec2_size, var.env) // X = lookup(map, key)
 
   tags = {
-    Name = "${var.env}-server"
+    Name  = "${var.env}-server"
     Owner = var.env == "prod" ? var.prod_owner : var.no_prod_owner
   }
 }
@@ -59,28 +59,28 @@ resource "aws_instance" "my_webserver_2" {
 //======================================================================================================================
 
 resource "aws_security_group" "my_terraform_security_group" {
-  name = "Terraform WebServer Dynamic Security Group"
+  name        = "Terraform WebServer Dynamic Security Group"
   description = "Dynamic Security Group with SSH, HTTP, and HTTPS rules by Terraform"
 
   dynamic "ingress" {
     for_each = lookup(var.allow_port_list, var.env)
     content {
-      from_port = ingress.value
-      to_port = ingress.value
-      protocol = "tcp"
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
     }
   }
 
   egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name        = "Dynamic Security Group"
-    Owner       = "Stan Serbin"
+    Name  = "Dynamic Security Group"
+    Owner = "Stan Serbin"
   }
 }

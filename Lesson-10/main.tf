@@ -20,7 +20,7 @@
 # -----------------------------------------------------------------------------------
 
 provider "aws" {
-  region = "us-east-1"
+  region     = "us-east-1"
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
 }
@@ -29,7 +29,7 @@ provider "aws" {
 
 data "aws_availability_zones" "available_zones" {}
 data "aws_ami" "latest_amazon_linux" {
-  owners = ["amazon"]
+  owners      = ["amazon"]
   most_recent = true
   filter {
     name   = "name"
@@ -40,42 +40,42 @@ data "aws_ami" "latest_amazon_linux" {
 //======================================================================================================================
 
 resource "aws_security_group" "web_security_group" {
-  name = "Terraform WebServer Dynamic Security Group"
+  name        = "Terraform WebServer Dynamic Security Group"
   description = "Dynamic Security Group with SSH, HTTP, and HTTPS rules by Terraform"
 
   dynamic "ingress" {
     for_each = ["80", "443", "22"]
     content {
-      from_port = ingress.value
-      to_port = ingress.value
-      protocol = "tcp"
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
     }
   }
 
   egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name        = "Dynamic Security Group"
-    Owner       = "Stan Serbin"
+    Name  = "Dynamic Security Group"
+    Owner = "Stan Serbin"
   }
 }
 
 //======================================================================================================================
 
 resource "aws_launch_template" "web_launch_template" {
-#   name = "WebServer-Highly-Available-LC"
-  name_prefix = "WebServer-Highly-Available-LC-" // Amazon will add random numbers to the end of the string
+  #   name = "WebServer-Highly-Available-LC"
+  name_prefix   = "WebServer-Highly-Available-LC-" // Amazon will add random numbers to the end of the string
   image_id      = data.aws_ami.latest_amazon_linux.id
   instance_type = "t2.micro"
 
   network_interfaces {
-    security_groups = [aws_security_group.web_security_group.id]
+    security_groups             = [aws_security_group.web_security_group.id]
     associate_public_ip_address = true
   }
 
@@ -85,9 +85,9 @@ resource "aws_launch_template" "web_launch_template" {
     device_name = "/dev/xvda" // Root volume
 
     ebs {
-      volume_type           = "gp2"       // General Purpose SSD
-      volume_size           = 8          // 20 GiB
-      delete_on_termination = true        // Delete volume on instance termination
+      volume_type           = "gp2" // General Purpose SSD
+      volume_size           = 8     // 20 GiB
+      delete_on_termination = true  // Delete volume on instance termination
     }
   }
 
@@ -109,14 +109,14 @@ resource "aws_autoscaling_group" "web_autoscaling_group" {
   name = "ASG-${aws_launch_template.web_launch_template.name}"
 
   launch_template {
-    id = aws_launch_template.web_launch_template.id
+    id      = aws_launch_template.web_launch_template.id
     version = "$Latest" // Use the latest version of the Launch Template
   }
 
-  max_size = 2
-  min_size = 2
-  desired_capacity = 2 // Ensures at least 2 servers are always running
-  min_elb_capacity = 2 // At least 2 servers must pass the health check
+  max_size          = 2
+  min_size          = 2
+  desired_capacity  = 2     // Ensures at least 2 servers are always running
+  min_elb_capacity  = 2     // At least 2 servers must pass the health check
   health_check_type = "ELB" // Instances failing ELB health checks are replaced
 
   vpc_zone_identifier = [
@@ -128,12 +128,12 @@ resource "aws_autoscaling_group" "web_autoscaling_group" {
 
   dynamic "tag" {
     for_each = {
-      Name = "WebServer-in-ASG"
+      Name  = "WebServer-in-ASG"
       Owner = "Stan Serbin"
     }
     content {
-      key = tag.key
-      value = tag.value
+      key                 = tag.key
+      value               = tag.value
       propagate_at_launch = true
     }
   }
@@ -171,7 +171,7 @@ resource "aws_elb" "web_elb" {
   }
 
   tags = {
-    Name = "WebServer-Highly-Available-ELB"
+    Name  = "WebServer-Highly-Available-ELB"
     Owner = "Stan Serbin"
   }
 }

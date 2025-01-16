@@ -12,27 +12,27 @@ variable "aws_secret_key" {
 
 variable "region" {
   description = "AWS Region to deploy server"
-  type = string
-  default = "us-east-1"
+  type        = string
+  default     = "us-east-1"
 }
 
 variable "instance_type" {
   description = "Instance type"
-  type = string
-  default = "t2.micro"
+  type        = string
+  default     = "t2.micro"
 }
 
 variable "allow_ports" {
   description = "List of ports for server"
-  type = list
-  default = ["80", "443", "22"]
+  type        = list(any)
+  default     = ["80", "443", "22"]
 }
 
 variable "common_tags" {
   description = "Common tags for all resources"
-  type = map
+  type        = map(any)
   default = {
-    Owner = "Stan Serbin"
+    Owner   = "Stan Serbin"
     Project = "Snake"
   }
 }

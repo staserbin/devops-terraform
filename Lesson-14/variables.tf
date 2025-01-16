@@ -12,21 +12,21 @@ variable "aws_secret_key" {
 
 variable "region" {
   description = "AWS Region to deploy server"
-  type = string
-  default = "us-east-1"
+  type        = string
+  default     = "us-east-1"
 }
 
 variable "environment" {
-  type = string
+  type    = string
   default = "DEV"
 }
 
 variable "project_name" {
-  type = string
+  type    = string
   default = "STELLA"
 }
 
 variable "owner" {
-  type = string
+  type    = string
   default = "Stan Serbin"
 }

@@ -23,7 +23,7 @@ provider "aws" {
 
 variable "aws_users" {
   description = "List of AIM Users to create"
-  default = ["Stan", "Alex", "Tim", "Boris"]
+  default     = ["Stan", "Alex", "Tim", "Boris"]
 }
 
 //======================================================================================================================
@@ -36,16 +36,16 @@ resource "aws_iam_user" "user_1" {
 
 resource "aws_iam_user" "users" {
   count = length(var.aws_users)
-  name = element(var.aws_users, count.index)
+  name  = element(var.aws_users, count.index)
 }
 
 //======================================================================================================================
 
 resource "aws_instance" "servers" {
-  count = 3
-  ami           = "ami-09115b7bffbe3c5e4"
+  count         = 3
+  ami           = "ami-05576a079321f21f8"
   instance_type = "t2.micro"
   tags = {
-    Name = "Server Number ${count.index + 1}"       // Add 1 because the indexing started at 0
+    Name = "Server Number ${count.index + 1}" // Add 1 because the indexing started at 0
   }
 }

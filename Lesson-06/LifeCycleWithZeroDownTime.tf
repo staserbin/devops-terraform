@@ -17,7 +17,7 @@
 
 
 provider "aws" {
-  region = "us-east-1"
+  region     = "us-east-1"
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
 }
@@ -53,14 +53,14 @@ resource "aws_instance" "my_webserver" {
   }
 
   # Prevents instance destruction during code updates and 'terraform apply'
-#   lifecycle {
-#     prevent_destroy = true
-#   }
+  #   lifecycle {
+  #     prevent_destroy = true
+  #   }
 
   # Ignores specified changes and doesn't destroy the instance
-#   lifecycle {
-#     ignore_changes = ["ami", "user_data"]
-#   }
+  #   lifecycle {
+  #     ignore_changes = ["ami", "user_data"]
+  #   }
 
   # Creates new server and reattaches IP-address via Elastic IP, and only after that destroys previous server version
   lifecycle {
@@ -71,28 +71,28 @@ resource "aws_instance" "my_webserver" {
 //======================================================================================================================
 
 resource "aws_security_group" "my_terraform_security_group" {
-  name = "Terraform WebServer Dynamic Security Group"
+  name        = "Terraform WebServer Dynamic Security Group"
   description = "Dynamic Security Group with SSH, HTTP, and HTTPS rules by Terraform"
 
   dynamic "ingress" {
     for_each = ["80", "443", "22"]
     content {
-      from_port = ingress.value
-      to_port = ingress.value
-      protocol = "tcp"
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
     }
   }
 
   egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name        = "Dynamic Security Group"
-    Owner       = "Stan Serbin"
+    Name  = "Dynamic Security Group"
+    Owner = "Stan Serbin"
   }
 }
