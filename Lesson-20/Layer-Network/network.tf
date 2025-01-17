@@ -23,9 +23,9 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "NAME-OF-YOUR-S3-BUCKET" // Name of previously created s3 bucket for data storing
-    key = "dev/network/terraform.tfstate" // Desired path and file name
-    region = "us-east-1" // Name of region where s3 is located
+    bucket = "NAME-OF-YOUR-S3-BUCKET"        // Name of previously created s3 bucket for data storing
+    key    = "dev/network/terraform.tfstate" // Desired path and file name
+    region = "us-east-1"                     // Name of region where s3 is located
   }
 }
 
@@ -50,10 +50,10 @@ resource "aws_internet_gateway" "main_gateway" {
 }
 
 resource "aws_subnet" "public_subnet" {
-  count = length(var.public_subnet_cidrs)
-  vpc_id = aws_vpc.main_vpc.id
-  cidr_block = element(var.public_subnet_cidrs, count.index)
-  availability_zone = data.aws_availability_zones.available_zones.names[count.index]
+  count                   = length(var.public_subnet_cidrs)
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = element(var.public_subnet_cidrs, count.index)
+  availability_zone       = data.aws_availability_zones.available_zones.names[count.index]
   map_public_ip_on_launch = true
   tags = {
     Name = "${var.env}-public-${count.index + 1}"
@@ -71,8 +71,8 @@ resource "aws_route_table" "public_subnets" {
   }
 }
 
-resource "aws_route_table_association" "public_riutes" {
-  count = length(aws_subnet.public_subnet[*].id)
+resource "aws_route_table_association" "public_routes" {
+  count          = length(aws_subnet.public_subnet[*].id)
   route_table_id = aws_route_table.public_subnets.id
-  subnet_id = element(aws_subnet.public_subnet[*].id, count.index)
+  subnet_id      = element(aws_subnet.public_subnet[*].id, count.index)
 }
